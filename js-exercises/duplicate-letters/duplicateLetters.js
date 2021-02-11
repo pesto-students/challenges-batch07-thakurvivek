@@ -1,3 +1,5 @@
+import { isString } from 'util';
+
 function populateLookup(splitChars) {
   const lookupObject = {};
   splitChars.forEach(element => {
@@ -10,17 +12,22 @@ function populateLookup(splitChars) {
   return lookupObject;
 }
 
-function countDuplicates(lookupObject, minCount) {
-  return Object.values(lookupObject)
-    .filter(count => count > minCount)
-    .length;
+function getDuplicateWithMaxCount(lookupObject) {
+  return Math.max(...Object.values(lookupObject));
+}
+
+function handleEmptyArg(str) {
+  if (!isString(str)) {
+    throw new Error('Input needed.');
+  }
 }
 
 function duplicateLetters(...args) {
   const EMPTY_DELIMITER = '';
+  handleEmptyArg(args[0]);
   const splitChars = args[0].split(EMPTY_DELIMITER);
-  const duplicateCount = countDuplicates(populateLookup(splitChars), 1);
-  return duplicateCount === 0 ? false : duplicateCount;
+  const duplicateCount = getDuplicateWithMaxCount(populateLookup(splitChars));
+  return duplicateCount === 1 ? false : duplicateCount;
 }
 
 export {
